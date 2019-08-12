@@ -1,10 +1,11 @@
 {
   "name": "nextjs-project",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "next",
+    "dev": "node server.js",
     "build": "next build",
     "start": "next start"
   },
@@ -29,6 +30,5 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.2.0"
-  },
-  "description": ""
+  }
 }
