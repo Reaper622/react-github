@@ -1,10 +1,17 @@
 import {useState,useCallback} from 'react'
+import getCofnig from 'next/config'
+import { connect } from 'react-redux'
+
 
 import Link from 'next/link'
-import { Button, Layout, Icon, Input, Avatar } from 'antd'
+import { Button, Layout, Icon, Input, Avatar, Tooltip, Dropdown, Menu } from 'antd'
 const { Header, Content, Footer } = Layout
 
 import Container from './Container'
+
+import { Logout } from '../store/store'
+
+const { publicRuntimeConfig } = getCofnig()
 
 
 const githubIconStyle = {
@@ -22,7 +29,7 @@ const footerStyle = {
 const Comp = ({color, children, style}) => <div style={{color, ...style}}>{children}</div>
 
 
-export default ({ children }) => {
+function MyLayout ({ children, user, logout })  {
   const [search,setSearch] = useState('')
 
   const handleSearchChange = useCallback((event) => {
@@ -30,6 +37,20 @@ export default ({ children }) => {
   }, [setSearch])
 
   const handleOnSearch = useCallback(() => {}, [])
+
+  const handleLogout = useCallback(() => {
+    logout()
+  }, [])
+
+  const userDropDown = (
+    <Menu>
+      <Menu.Item>
+        <a onClick={handleLogout}>
+          登出
+        </a>
+      </Menu.Item>
+    </Menu>
+  )
 
   return (
     <Layout>
@@ -47,7 +68,21 @@ export default ({ children }) => {
           </div>
           <div className="header-right">
             <div className="user">
-              <Avatar size={40} icon="user" />
+              {
+                (user && user.id) ? (
+                  <Dropdown overlay={userDropDown}>
+                    <a href="/">
+                      <Avatar size={40} src={user.avatar_url} />
+                    </a>
+                  </Dropdown>
+                ) : (
+                  <Tooltip title="点击进行登录">
+                    <a href={publicRuntimeConfig.OAUTH_URL}>
+                      <Avatar size={40} icon="user" />
+                    </a>
+                  </Tooltip>
+                )
+              }
             </div>
           </div>
         </Container>
@@ -83,3 +118,13 @@ export default ({ children }) => {
     </Layout>
   )
 }
+
+export default connect(function mapState(state) {
+  return {
+    user: state.user
+  }
+}, function mapReducer(dispatch) {
+  return {
+    logout: () => dispatch(Logout())
+  }
+})(MyLayout)
