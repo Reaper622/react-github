@@ -13,6 +13,7 @@ class MyApp extends App {
     context: 'value',
   }
 
+
   static async getInitialProps(ctx) {
     const { Component } = ctx
     console.log('app init')
@@ -32,9 +33,7 @@ class MyApp extends App {
       <Container>
         <Layout>
           <Provider store={reduxStore}>
-            <MyContext.Provider value={this.state.context}>
               <Component {...pageProps} />
-            </MyContext.Provider>
           </Provider>
         </Layout>
       </Container>
