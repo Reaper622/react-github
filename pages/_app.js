@@ -3,6 +3,8 @@ import { Provider } from 'react-redux'
 import Router from 'next/router'
 import Link from 'next/link'
 
+import axios from 'axios'
+
 import 'antd/dist/antd.css'
 
 import MyContext from '../lib/my-context'
@@ -33,6 +35,9 @@ class MyApp extends App {
     Router.events.on('routeChangeStart', this.startLoading)
     Router.events.on('routeChangeComplete', this.stopLoading)
     Router.events.on('routeChangeError', this.stopLoading)
+
+    axios.get('/github/search/repositories?q=react')
+      .then(res => console.log(res))
   }
 
   componentWillUnmount() {

@@ -5,6 +5,7 @@ const session = require('koa-session')
 const Redis = require('ioredis')
 
 const auth = require('./server/auth')
+const api = require('./server/api')
 
 const RedisSessionStore = require('./server/session-store')
 
@@ -31,6 +32,8 @@ app.prepare().then(() => {
 
   // 配置处理github OAuth的登录
   auth(server)
+  
+  api(server)
 
   router.get('/a/:id', async ctx => {
     const id = ctx.params.id
