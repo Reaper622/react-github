@@ -1,8 +1,13 @@
-import axios from "axios";
+import axios from "axios"
+import { useEffect } from 'react'
 
 const api = require('../lib/api')
 
 function Index() {
+
+    useEffect(() => {
+        axios.post('/github/test', { test: 123})
+    })
     return <span>Index</span>
 }
 
