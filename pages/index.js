@@ -1,6 +1,7 @@
-import { Button, Icon } from 'antd'
+import { Button, Icon, Tabs } from 'antd'
 import getCofnig from 'next/config'
 import { connect } from 'react-redux'
+import Router, { withRouter } from 'next/router'
 
 import Repo from '../components/Repo'
 
@@ -8,7 +9,14 @@ const { publicRuntimeConfig } = getCofnig()
 
 const api = require('../lib/api')
 
-function Index({ userRepos, userStarredRepos, user }) {
+function Index({ userRepos, userStarredRepos, user, router }) {
+
+    const tabKey = router.query.key || 1
+
+    const handleTabChange = (activeKey) => {
+        Router.push(`/?key=${activeKey}`)
+    }
+
     if (!user || !user.id) {
         return (
             <div className="root">
@@ -39,9 +47,21 @@ function Index({ userRepos, userStarredRepos, user }) {
                 </p>
             </div>
                 <div className="user-repos">
+                    {/* {
+                        userRepos.map(repo => <Repo repo={repo} />)
+                    } */}
+                <Tabs defaultActiveKey={tabKey} onChange={handleTabChange} animated={false}>
+                    <Tabs.TabPane tab="你的仓库" key="1">
                     {
                         userRepos.map(repo => <Repo repo={repo} />)
                     }
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="你关注的仓库" key="2">
+                    {
+                        userStarredRepos.map(repo => <Repo repo={repo} />)
+                    }
+                    </Tabs.TabPane>
+                </Tabs>
                 </div>
             <style jsx>{`
                 .root {
@@ -116,4 +136,4 @@ export default connect(function mapState(state) {
     return {
         user: state.user
     }
-})(Index)
+})(withRouter(Index))
