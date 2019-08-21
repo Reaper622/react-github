@@ -28,7 +28,6 @@ app.prepare().then(() => {
 
   const SESSION_CONFIG = {
     key: 'rid',
-    maxAge: 10 * 1000,
     store: new RedisSessionStore(redis),
   }
 
