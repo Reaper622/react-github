@@ -2,6 +2,8 @@ import { Button, Icon } from 'antd'
 import getCofnig from 'next/config'
 import { connect } from 'react-redux'
 
+import Repo from '../components/Repo'
+
 const { publicRuntimeConfig } = getCofnig()
 
 const api = require('../lib/api')
@@ -36,9 +38,11 @@ function Index({ userRepos, userStarredRepos, user }) {
                     <a href={`mailto:${user.email}`}>{user.email}</a>
                 </p>
             </div>
-            <div className="user-repos">
-                <p>User Repos</p>
-            </div>
+                <div className="user-repos">
+                    {
+                        userRepos.map(repo => <Repo repo={repo} />)
+                    }
+                </div>
             <style jsx>{`
                 .root {
                     display: flex;
@@ -68,6 +72,9 @@ function Index({ userRepos, userStarredRepos, user }) {
                 .avatar {
                     width: 100%;
                     border-radius: 5px;
+                }
+                .user-repos {
+                    flex-grow: 1;
                 }
                 `}</style>
         </div>
