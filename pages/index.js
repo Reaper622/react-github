@@ -20,7 +20,7 @@ let cachedUserRepos, cachedUserStarredRepos
 
 function Index({ userRepos, userStarredRepos, user, router }) {
 
-    const tabKey = router.query.key || 1
+    const tabKey = router.query.key || "1"
 
     const handleTabChange = (activeKey) => {
         Router.push(`/?key=${activeKey}`)
