@@ -45,35 +45,19 @@ const SORT_TYPES = [
      fontWeight: 100
  }
 
+ const FilterLink = ({ name, query, lang, sort, order }) => {
+    let queryString = `?query=${query}`
+    if(lang) queryString += `&lang=${lang}`
+    if(sort) queryString += `&sort=${sort}&order=${order || 'desc'}`
+     return <Link href={`/search${queryString}`}><a>{name}</a></Link>
+ }
+
+
 function Search({ router, repos }) {
 
-    console.log(repos)
-
-    const { sort, order, lang, query } = router.query
-
-    const handleLanguageChange = (language) => {
-        Router.push({
-            pathname: '/search',
-            query: {
-                query,
-                lang: language,
-                sort,
-                order
-            }
-        })
-    }
-
-    const handleSortChange = (sort) => {
-        Router.push({
-            pathname: '/search',
-            query: {
-                query,
-                lang,
-                sort: sort.value,
-                order: sort.order
-            }
-        })
-    }
+    const querys = router.query
+    const { sort, order, lang } = router.query
+    
     return (
         <div className="root">
             <Row gutter={20}>
@@ -88,7 +72,7 @@ function Search({ router, repos }) {
 
                             return (
                                 <List.Item style={selected ? selectedItemStyle : null}>
-                                        <a onClick={() => handleLanguageChange(item)}>{item}</a>
+                                    {selected ? <span>{item}</span> : <FilterLink {...querys}lang={item}name={item} />}
                                 </List.Item>
                             )
                         }} />
@@ -106,13 +90,31 @@ function Search({ router, repos }) {
 
                             return (
                                 <List.Item style={selected ? selectedItemStyle : null}>
-                                        <a onClick={() => handleSortChange(item)}>{item.name}</a>
+                                    {
+                                        selected ? <span>{item.name}</span> :(
+                                            <FilterLink 
+                                            {...querys}
+                                            order={item.order}
+                                            sort={item.value}
+                                            name={item.name} />
+                                        )
+                                    }
+                                        
                                 </List.Item>
                             )
                         }}
                     />
                 </Col>
             </Row>
+            <style jsx>{`
+                        .root {
+                            padding: 20px 0;
+                        }
+                        .list-header {
+                            font-weight: 800;
+                            font-size: 16px;
+                        }
+                `}</style>
         </div>
     )
 }
